@@ -1,0 +1,45 @@
+<table id="user-table" class="table">
+  
+    <thead>
+    <tr>
+      <th class="text-center" scope="col">Rank</th>
+      <th class="text-center" scope="col">Username</th>
+      <th class="text-center" scope="col">First Name</th>
+      <th class="text-center" scope="col">Last Name</th>
+      <th class="text-center" scope="col">Email</th>
+      <th class="text-center" scope="col">Last Login</th>
+      <!-- <th class="text-center" scope="col">Price (€)</th> -->
+      <th class="text-center" scope="col">{% if perms.app.change_customuser and perms.app.delete_customuser %} Update / Delete {% elif perms.app.change_customuser %} Update {% elif perms.app.delete_customuser %} Delete {% endif %}</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for person in persons %}
+        <tr>
+          <td class="text-center">{{ person.rank }}</td>
+          <td class="text-center">{{ person.username }}</td>
+          <td class="text-center">{{ person.first_name }}</td>
+          <td class="text-center">{{ person.last_name }}</td>
+          <!-- <td class="text-center">{{ item.pages }}</td> -->
+          <td class="text-center">{{ person.email }}</td>
+          <td class="text-center">{{ person.last_login }}</td>
+        
+          <td class="text-center">
+              <!-- Update buttons -->
+              {% if perms.app.change_customuser %}
+              <button type="button" class="update-user btn btn-sm btn-primary" data-form-url="{% url 'update_user' person.pk %}">
+                <span class="fa-solid fa-pencil"></span>
+              </button>
+              {% endif %}
+              <!-- Delete buttons -->
+              {% if perms.app.delete_customuser %}
+              <button type="button" class="delete-user btn btn-sm btn-danger" data-form-url="{% url 'delete_user' person.pk %}">
+                <span class="fa-solid fa-trash"></span>
+              </button>
+              {% endif %}
+          
+          </td>
+        </tr>
+      {% endfor %}
+  
+    </tbody>
+  </table>

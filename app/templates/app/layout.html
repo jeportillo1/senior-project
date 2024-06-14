@@ -1,0 +1,86 @@
+<!-- This is a layout page that other pages will inherit. -->
+<!-- Stuff like navigation, sidebar, copyright and stuff non unique to pages goes here-->
+
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"> -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>{{ title }}</title>
+    <link rel="shortcut icon" href="{%  static 'favicon.png' %}">
+    <link rel="shortcut icon" href="{%  static 'fontawesome/solid.css' %}">
+    
+
+    {% block stylesheets %}
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" /> -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'app/content/bootstrap5-form.css' %}" >
+
+   
+
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+     
+    <!-- Font awesome CSS -->
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- Custom CSS -->
+    <style>
+        * {
+            font-family: "{{request.user.user_profile.font_type}}";
+        }
+    </style>
+    <style media="screen">
+        .invalid {
+          color: #dc3545;
+          font-size: 80%;
+        }
+        body {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+        .footer {
+          margin: auto 0 0;
+          height: 56px;
+        }
+      </style>
+    {% endblock stylesheets %}
+</head>
+
+
+<body>
+  <header>
+    {% include "app/_nav.html" %}
+  </header>
+
+  <div class="container body-content">
+    {% block content %}{% endblock %}
+    <hr/>
+  </div>
+  <div class="text-center">
+  {% include "app/_footer.html" %}
+</div>
+
+
+    {% block scripts %}
+
+
+    <!-- You can alternatively load the minified version -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script src="{% static 'assets/js/popper.min.js' %}"></script> -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- You can alternatively load the minified version -->
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
+
+    {% endblock scripts %}
+
+    {% block extrascripts %}{% endblock extrascripts %}
+</body>
+</html>

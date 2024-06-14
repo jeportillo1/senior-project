@@ -1,0 +1,28 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<!--&lt;!&ndash;<link rel="stylesheet" type="text/css" href="../../static/app/content/style.css"><br><br>-->
+<head>
+    <title>{{ title }}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/style.css' %}" />
+</head>
+<!--from views.py-->
+<h2>{{ title }}</h2>
+<h3>{{ message }}</h3>
+
+<address>
+    ADDRESS<br />
+    CITY, STATE ZIP<br />
+    <abbr title="Phone">P:</abbr>
+    123.456.7890
+</address>
+
+<address>
+<!--    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />-->
+<!--    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>-->
+        <strong>Development:</strong> <a href="mailto:wip@wip.com">wip@wip.com</a>
+
+</address>
+
+{% endblock %}

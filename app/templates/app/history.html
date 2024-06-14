@@ -1,0 +1,153 @@
+<!--<!DOCTYPE html>-->
+{% extends "app/layout.html" %}
+
+{% block content %}
+<head>
+	<title>History</title>
+<!--	<link rel="stylesheet" type="text/css" href="css/style2.css">-->
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'app/content/style2.css' %}" />
+
+	<style>
+		table {
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+		
+		th, td {
+		  padding: 8px;
+		  text-align: left;
+		  border-bottom: 1px solid #ddd;
+		}
+		
+		tr:hover {background-color: coral;}
+
+		h2{
+   			 text-align: center;
+   			 color: #000000;
+  			  padding: 20px;
+   			 text-decoration: overline underline;
+		}
+
+		h3{
+            text-align: center;
+            text-decoration: underline;
+        }
+	
+	</style>
+
+</head>
+<body>
+	<br><br>
+	<h2>History</h2><br>
+
+	<!-- <hr> NON-FUNCTIONAL. Commented out for now.
+
+	<div class="topnav">
+		<div class="search-container">
+			<form action="/action_page.php">
+				<input type="text" placeholder="Search.." name="search">
+				<button type="submit"><i class="fa fa-search"> Go
+				</i></button>
+			</form>
+		</div>
+	</div>
+	<hr>
+
+			TODO: Figure out why css file changes not applying. Sort alerts by time. Implement different buttons
+			for different types of sorting? Only displays and hides one item in each db.
+	<h3>Audit Log</h3>	-->
+
+	<div class="table" style="height:600px;overflow:auto;">
+		<table>
+			<!-- Table Headers -->
+			<tr id>
+				<th>Event</th>
+				<th>UID</th>
+				<th>Time</th> 
+			</tr>
+			{% for i in history %}
+				{% if "acess" in i.descrption %}
+					<tr class ="accesses" style.display = 'none'>
+						<td>{{i.descrption}}</td>
+                		<td>{{i.user_id}}</td>
+                		<td>{{i.created_date}}</td>
+					</tr>
+				{% elif "change" in i.descrption %}
+					<tr class ="changes" style.display = 'none'>
+						<td>{{i.descrption}}</td>
+                		<td>{{i.user_id}}</td>
+                		<td>{{i.created_date}}</td>
+					</tr>
+				{% elif "Log" in i.descrption %}
+					<tr class ="logins" style.display = 'none'>
+						<td>{{i.descrption}}</td>
+                		<td>{{i.user_id}}</td>
+                		<td>{{i.created_date}}</td>
+					</tr>
+				{% endif %}
+			{% endfor %}
+		</table>
+	</div>	
+	<hr>
+
+	<div class="containerSettings">
+		
+		<label class="containerSettings">Hide Access History
+			<input type="checkbox" id="accesses_check" checked onclick="view_accesses()">
+			<span class="checkmark"></span>
+		</label>
+
+		<label class="containerSettings">Hide Change History
+			<input type="checkbox" id="changes_check" checked onclick="view_changes()">
+			<span class="checkmark"></span>
+		</label>
+		
+	</div>
+</body>
+
+<script>
+	function view_accesses() {
+	  	var checkBox = document.getElementById("accesses_check");
+		var accesses = document.getElementsByClassName('accesses');
+		if (checkBox.checked == false) {
+			for (var row of accesses) {
+				row.style.display = 'table-row';
+			}
+		} else {
+			for (var row of accesses) {
+				row.style.display = 'none';
+			}
+		}
+	}
+
+	function view_changes() {
+		var checkBox = document.getElementById("changes_check");
+		var changes = document.getElementsByClassName('changes');
+		if (checkBox.checked == false) {
+			for (var row of changes) {
+				row.style.display = 'table-row';
+			}
+		} else {
+			for (var row of changes) {
+				row.style.display = 'none';
+			}
+		}
+	}
+	
+	function view_login() {
+		var checkBox = document.getElementById("login_check");
+		var logins = document.getElementsByClassName('logins');
+		if (checkBox.checked == false) {
+			for (var row of logins) {
+				row.style.display = 'table-row';
+			}
+		} else {
+			for (var row of logins) {
+				row.style.display = 'none';
+			}
+		}
+	}
+</script>
+
+{% endblock %}

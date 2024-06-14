@@ -1,0 +1,1 @@
+./base.bat ./manage.py test

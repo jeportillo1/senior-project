@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="/">ACR</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+
+        
+        <li class="nav-item {% if 'about' in request.path %} active {% endif %}">
+          <a class="nav-link " href="{% url 'about' %}">About</a>
+        </li>
+        {% if user.is_authenticated  %}
+
+          {% if perms.app.view_customuser %}
+            <li class="nav-item {% if 'admin_settings' in request.path %} active {% endif %}">
+              <a class="nav-link " href="{% url 'admin_settings' %}">Admin Settings</a>
+            </li>
+          {% endif %}
+          
+          {% if perms.app.change_global_settings %}
+            <li class="nav-item {% if 'people' in request.path %} active {% endif %}">
+              <a class="nav-link " href="{% url 'people_index' %}">Users</a>
+            </li>
+          {% endif %}
+
+          {% if perms.app.view_history %}
+            <li class="nav-item {% if 'history' in request.path %} active {% endif %}">
+              <a class="nav-link " href="{% url 'history' %}">History</a>
+            </li>
+          {% endif %}
+
+          {% if perms.app.view_item %}
+            <li class="nav-item {% if 'inventory' in request.path %} active {% endif %}">
+              <a class="nav-link " href="{% url 'inventory_index' %}">Inventory</a>
+            </li>
+          {% endif %}
+
+        {% endif %}
+      </ul>
+
+        {% include 'app/loginpartial.html' %}
+     </div>
+  </nav>

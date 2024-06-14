@@ -1,0 +1,136 @@
+{% extends "app/layout.html" %}
+{% load widget_tweaks %}
+
+
+
+{% block content %}
+<br><br>
+<head>
+	
+	<style>
+		.switchLabel{
+			position: relative;
+			display: block;
+			width: 40px;
+			height: 20px;
+			margin-bottom: 10px;
+		}
+		.switchLabel input{
+			display: none;
+		}
+
+		.slidinggrove{
+			position: absolute;
+			top: 0;
+			right: 0;
+			left: 0;
+			bottom: 0;
+			background: #ABABAB;
+			border-radius: 10px;
+			transition: all 0.3s ease;
+		}
+		.slidinggrove:after{
+			position: absolute;
+			content: "";
+			width: 18px;
+			height: 18px;
+			border-radius: 50%;
+			background: #FFF;
+			top: 1px;
+			left: 1px;
+			transition: all 0.3s ease;
+		}
+
+		input:checked + .slidinggrove {
+			background: #03A9F4;
+		}
+		input:checked + .slidinggrove:after {
+			transform: translateX(20px);
+		}
+
+		.labelterm{
+			position: relative;
+			top: 5px;
+			margin-left: 65px;
+		}
+			  
+	</style>
+	
+</head>
+
+
+	<form method="POST">
+		{% csrf_token %}
+		<div class="container mt-3 ml-5 mr-5">
+			<div class="row">
+			  	<div class="col">
+					<div class="row">
+				  		<div class="col-10 mb-2">
+							<h2 class="mt-5 mb-0 text-center" >{{ title }}</h2>
+							<div class="modal-header"></div>
+
+							<div class="modal-body">
+
+								<div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+								{% for error in form.non_field_errors %}
+									{{ error }}
+								{% endfor %}
+								</div>
+							
+								{% for field in form %}
+								<div class="form-group">
+									{% if field.field.widget.input_type == "checkbox"%}
+										{% comment %} implemnt custom "checkbox" which is toggle slider {% endcomment %}
+										<div class="d-flex justify-content-between">
+											<div><label for="{{ field.id_for_label }}">{{ field.label }} </label></div>
+											<div class="switchLabel text-end">
+												{{ field }}
+												
+												<div class="slidinggrove"> </div>
+												<label class="switchLabel" for="{{ field.id_for_label }}" ></label>
+											</div>
+										</div>
+									{% elif field.field.widget.input_type == "select" %}
+										<div class="d-flex justify-content-between">
+											<div>
+												<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+											</div>
+											<div class="ml-auto">
+												{% render_field field class="form-select" style="text-align:center;"  placeholder=field.label %} 
+											</div>
+										</div>
+									
+									{% else %} 
+										<div class="d-flex justify-content-between">
+											<div>
+												<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+											</div>
+											<div class="ml-auto">
+												{% render_field field class="form-control" style="text-align:center;"  placeholder=field.label %} 
+											</div>
+										</div>
+									{% endif %}
+
+									<div class="{% if field.errors %} invalid{% endif %}">
+										{% for error in field.errors %}
+											<p class="help-block">{{ error }}</p>
+										{% endfor %}
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+							
+							<div class="modal-footer">
+								<button type="button" class="btn btn-danger" onclick="window.location='';"> Cancel</button>
+								<button type="submit" class="btn btn-primary">Update</button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	
+{% endblock %}

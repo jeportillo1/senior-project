@@ -1,0 +1,81 @@
+{% extends 'app/layout.html' %}
+
+{% block content %}
+<head>    
+  <title>Admin Homepage</title>
+<!--    <link rel="stylesheet" type="text/css" href="css/style2.css">-->
+  {% load static %}
+  <!-- <link rel="stylesheet" type="text/css" href="{% static 'app/content/style.css' %}" /> -->
+  <style>
+		h2{
+   			 text-align: center;
+   			 color: #000000;
+  			  padding: 20px;
+   			 text-decoration: overline underline;
+		}
+
+		h3{
+            text-align: center;
+            text-decoration: underline;
+        }
+
+    .nostretch{
+        width: 100px !important; 
+      }
+        
+	</style>
+</head>   
+
+
+  <br><br>
+  <div class="container mt-5 mb-5"></div>
+    <h1 class="modal-title text-center">Admin Homepage</h1>
+  </div>
+  {% include "app/_modal.html" %}
+  <div class="container mt-3">
+    
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="col-12 mb-4">  
+              <!-- Upload File Button WIP -->
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="myfile">
+                <button class = "ml-auto btn btn-primary" type="submit">Upload</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="table" style="height:700px;overflow:auto;">
+          
+          <table id="admin-table" class="table">
+
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">Event</th>
+              <th class="text-center" scope="col">UID</th>
+              <th class="text-center" scope="col">Time</th>
+            </tr>
+            </thead>
+            <tbody>
+              {% for i in history %}
+              <tr>
+                <td class="text-center">{{i.descrption}}</td>
+                <td class="text-center">{{i.user_id}}</td>
+                <td class="text-center">{{i.created_date}}</td>
+              </tr>
+            {% endfor %}
+          
+            </tbody>
+          </table>
+          {% include "app/_paging.html" %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+{% endblock content %}

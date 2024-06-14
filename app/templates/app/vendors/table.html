@@ -1,0 +1,36 @@
+<table id="vendors-table" class="table">
+  
+    <thead>
+    <tr>
+      <th class="text-center" scope="col">Vendor</th>
+      <th class="text-center" scope="col"> Update / Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for vendor in vendors %}
+      <tr>
+        <td class="text-center"><a href="{{vendor.path}}" target="_blank">{{vendor.name}}</a></td>
+        <td class="text-center">
+          {% if global_settings.allow_inventory_changes and perms.app.change_vendor %}
+            <!-- Update buttons -->
+            <button type="button" class="update-vendor btn btn-sm btn-primary" data-form-url="{% url 'update_vendor' itemfk vendor.pk %}">
+              <span class="fa-solid fa-pencil"></span>
+            </button>
+          {% endif %}
+          {% if global_settings.allow_inventory_changes and perms.app.delete_vendor %}
+            <!-- Delete buttons -->
+            <button type="button" class="delete-vendor btn btn-sm btn-danger" data-form-url="{% url 'delete_vendor' itemfk vendor.pk %}">
+              <span class="fa-solid fa-trash"></span>
+            </button>
+          {% endif %}
+          
+        </td>
+      </tr>
+    {% endfor %}
+  
+    </tbody>
+  </table>
+  
+  
+
+     

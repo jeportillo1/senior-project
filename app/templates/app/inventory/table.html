@@ -1,0 +1,174 @@
+<table id="items-table" class="table">
+  
+    <thead>
+    <tr>
+      <th class="text-center" scope="col">Alerts</th>
+      <th class="text-center" scope="col">Part #</th>
+      <th class="text-center" scope="col">Name</th>
+      <th class="text-center" scope="col">Image</th>
+      <th class="text-center" scope="col">Stock</th>
+      <th class="text-center" scope="col">Threshold</th>
+      <th class="text-center" scope="col">View 
+        {% if perms.app.change_item %} / Update {% endif %}
+        {% if perms.app.view_vendor %} / Buy {% endif %}
+        {% if perms.app.delete_item %} / Delete {% endif %}
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+      <tr>
+        <td class="text-center"> 
+          {% if item.alert %}<i class="fa-solid fa-triangle-exclamation" style="color: red;"></i> {% endif %}</td>
+        <td class="text-center">{{ item.part_number }}</td>
+        <td class="text-center">{{ item.title }}</td>
+        <td class="text-center"><img style="max-width: 40px; max-height: 40px" src="{{ item.image_path }}"></td>
+        <td class="text-center">{{ item.stock }}</td>
+        <td class="text-center">{{ item.threshold }}</td>
+        <td class="text-center">
+          <!-- Read buttons -->
+          {% if perms.app.view_item %}
+          <button type="button" class="read-item btn btn-sm btn-info" data-form-url="{% url 'read_item' item.pk %}">
+            <i class="fa-solid fa-circle-info"></i>
+          </button>
+          {% endif %}
+          {% if global_settings.allow_inventory_changes and perms.app.change_item %}
+            <!-- Update buttons -->
+            <button type="button" class="update-item btn btn-sm btn-primary" data-form-url="{% url 'update_item' item.pk %}">
+              <span class="fa-solid fa-pencil"></span>
+            </button>
+          {% endif %}
+          {% if global_settings.allow_inventory_purchases and perms.app.view_vendor %}
+            <!-- buy buttons -->
+            <button type="button" class="order-item btn btn-sm btn-warning" data-form-url="{% url 'ReadVendor' item.pk %}">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </button>
+          {% endif %}
+          {% if global_settings.allow_inventory_changes and perms.app.delete_item %}
+            <!-- Delete buttons -->
+            <button type="button" class="delete-item btn btn-sm btn-danger" data-form-url="{% url 'delete_item' item.pk %}">
+              <span class="fa-solid fa-trash"></span>
+            </button>
+          {% endif %}
+
+          
+        </td>
+      </tr>
+    {% endfor %}
+  
+    </tbody>
+  </table>
+  {% include "app/_paging.html" %}
+  
+  <script type="text/javascript">
+  $(function () {
+      // Create book asynchronous button
+      // message
+      var asyncSuccessMessageCreate = [
+        "<div ",
+        "style='position:fixed;top:0;z-index:10000;width:100%;border-radius:0;' ",
+        "class='alert alert-icon alert-success alert-dismissible fade show mb-0' role='alert'>",
+        "Success: Item was created.",
+        "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>",
+        "<span aria-hidden='true'>&times;</span>",
+        "</button>",
+        "</div>",
+        "<script>",
+        "$('.alert').fadeTo(2000, 500).slideUp(500, function () {$('.alert').slideUp(500).remove();});",
+        "<\/script>"
+      ].join("");
+
+      // modal form
+      function createBookAsyncModalForm() {
+        $("#create-item-async").modalForm({
+            formURL: "{% url 'create_item' %}",
+            modalID: "#create-modal",
+            asyncUpdate: true,
+            asyncSettings: {
+              closeOnSubmit: true,
+              successMessage: asyncSuccessMessageCreate,
+              dataUrl: "{% if searched %}items/{{page}}/{{searchby|slugify}}/{{searched|slugify}}{% else %}items/{{page}}{% endif %}",
+              dataElementId: "#items-table",
+              dataKey: "table",
+              addModalFormFunction: reinstantiateModalForms
+            }
+        });
+      }
+      createBookAsyncModalForm();
+
+      // Update book asynchronous button
+      // message
+      var asyncSuccessMessageUpdate = [
+        "<div ",
+        "style='position:fixed;top:0;z-index:10000;width:100%;border-radius:0;' ",
+        "class='alert alert-icon alert-success alert-dismissible fade show mb-0' role='alert'>",
+        "Success: Item was updated.",
+        "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>",
+        "<span aria-hidden='true'>&times;</span>",
+        "</button>",
+        "</div>",
+        "<script>",
+        "$('.alert').fadeTo(2000, 500).slideUp(500, function () {$('.alert').slideUp(500).remove();});",
+        "<\/script>"
+      ].join("");
+
+      // modal form
+      function updateItemModalForm() {
+        $(".update-item").each(function () {
+          $(this).modalForm({
+            formURL: $(this).data("form-url"),
+            asyncUpdate: true,
+            asyncSettings: {
+              closeOnSubmit: false,
+              successMessage: asyncSuccessMessageUpdate, 
+              dataUrl: "{% if searched %}items/{{page}}/{{searchby|slugify}}/{{searched|slugify}}{% else %}items/{{page}}{% endif %}",
+              dataElementId: "#items-table",
+              dataKey: "table",
+              addModalFormFunction: reinstantiateModalForms
+            }
+          });
+        });
+      }
+      updateItemModalForm();
+
+      // Delete Item buttons - formURL is retrieved from the data of the element
+      function deleteItemModalForm() {
+        $(".delete-item").each(function () {
+            $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+        });
+      }
+      deleteItemModalForm();
+
+      // Order Item buttons - formURL is retrieved from the data of the element
+      function orderItemModalForm() {
+        $(".order-item").each(function () {
+            $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+        });
+      }
+      orderItemModalForm();
+
+
+      // Read item buttons
+      function readItemModalForm() {
+        $(".read-item").each(function () {
+            $(this).modalForm({formURL: $(this).data("form-url")});
+        });
+      }
+      readItemModalForm();
+
+      function reinstantiateModalForms() {
+        createItemAsyncModalForm();
+        readItemModalForm();
+        updateItemModalForm();
+        deleteItemModalForm();
+        orderItemModalForm();
+      }
+
+      // Hide message
+      $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+          $(".alert").slideUp(500);
+      });
+
+  
+  });
+</script>

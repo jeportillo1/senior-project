@@ -1,0 +1,104 @@
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <!-- If outside of 'x' range (look at middle) then -->
+            {% if page_obj.has_previous and page_obj.number|add:'-3' > 1 %}
+                <!-- The move to first page -->
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{{extra}}" aria-label="Previous">
+                        1                        
+                    </a>
+                </li>
+                {% if page_obj.number|add:'-4' != 1 %}
+                <li class="page-item">
+                    <!-- The fill in page to go to -->
+                    <a class="go-to-dot page-link" data-toggle="modal" data-target="#exampleModal" id="go_to_page_1">
+                        <span class="fa-solid fa-ellipsis" style="color: blue;"></span>
+                    </a>
+                </li>
+                {% endif %}
+            {% endif %}
+            
+            {% for n in page_obj.paginator.page_range %}
+            {% if page_obj.number == n %}
+            <!-- current page -->
+                <li class="page-item active">
+                <span class="page-link">{{ n }}<span class="sr-only">(current)</span></span>
+                </li>
+            {% elif n > page_obj.number|add:'-4' and n < page_obj.number|add:'4' %}
+                <!-- display 'x'-1 pages to left and right of middle/current page -->
+                <li class="page-item"><a class="page-link" href="?page={{ n }}{{extra}}">{{ n }}</a></li>
+            {% endif %}
+            {% endfor %}
+            </li>
+            <!-- If outside of 'x' range (look at middle) then -->
+            {% if page_obj.has_next and page_obj.number|add:'3' <  page_obj.paginator.num_pages %}
+              {% if page_obj.number|add:'4' != page_obj.paginator.num_pages %}
+                <li class="page-item">
+                  <!-- The fill in page to go to -->
+                  <!-- <input class="page-link" style="width:40px" type="text" id="last_go_to" name="last_go_to" placeholder="..."><br> -->
+                  <a class="go-to-dot page-link" data-toggle="modal" data-target="#exampleModal" id="go_to_page_2">
+                      <span class="fa-solid fa-ellipsis" style="color: blue;"></span>
+                  </a>
+                </li>
+              {% endif %}
+              <li class="page-item">
+                <!-- The move to last page -->
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{{extra}}" aria-label="Next">
+                  {{ page_obj.paginator.num_pages }}
+                </a>
+              </li>
+
+            {% endif %}   
+        </ul>
+    </nav>
+
+    <div class="modal" tabindex="-1" role="dialog" id="exampleModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Go to page (1 to {{ page_obj.paginator.num_pages }}):</p>
+              <input class="form-control" id="go_to_page" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="go_to_page_btn">Go</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<script type="text/javascript">
+    var go_to_page = document.getElementById("go_to_page");
+    var go_to_page_btn = document.getElementById("go_to_page_btn");
+
+    go_to_page_btn.addEventListener("click", function(event) {
+        var num_pages = "{{ page_obj.paginator.num_pages}}";
+        var extra = "{{extra}}".replaceAll("amp;","");
+        var page = go_to_page.value;
+        if (parseInt(page) < 0 || parseInt(page) == 0) { page = "1";}
+        if (parseInt(page) > parseInt(num_pages) ) {page = num_pages; }
+        var loc = window.location.href;
+        loc = loc.substr(0, loc.lastIndexOf("/"));
+        location.replace(`${loc}/?page=${page}${extra}`);
+    });
+    document.addEventListener('keypress', function (e) {
+          if (e.key === 'Enter') {
+              if ($("#exampleModal").is(':visible')) {
+                var num_pages = "{{ page_obj.paginator.num_pages}}";
+                var extra = "{{extra}}".replaceAll("amp;","");
+                var page = go_to_page.value;
+                if (parseInt(page) < 0 || parseInt(page) == 0) { page = "1";}
+                if (parseInt(page) > parseInt(num_pages) ) {page = num_pages; }
+                var loc = window.location.href;
+                loc = loc.substr(0, loc.lastIndexOf("/"));
+                location.replace(`${loc}/?page=${page}${extra}`);
+              }
+          }
+        });
+</script>

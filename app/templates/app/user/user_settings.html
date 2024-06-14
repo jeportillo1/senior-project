@@ -1,0 +1,36 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<br><br>
+<h2>{{ title }}</h2>
+<head>
+	<title>{{ title }}</title>
+<!--	<link rel="stylesheet" type="text/css" href="../../static/app/content/settings_page.css">-->
+<!--	<link rel="stylesheet" type="text/css" href="../../static/app/content/style3.css">-->
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'app/content/style3.css' %}" />
+
+	<style>
+		h2{
+   			 text-align: center;
+   			 color: #000000;
+  			  padding: 20px;
+   			 text-decoration: overline underline;
+		}
+	</style>
+	
+</head>
+
+<body>
+	<hr>
+	<form method="POST">
+		{% csrf_token %}
+		<h3>Personal Settings</h3> <br>
+		{{user_form.as_p|linebreaks}} <br>
+		<!-- Cancel button just refreshes the page -->
+		<button type="submit" name="revert" value="revert">revert to default</button><br>
+		<button type="button" class="cancelbtn" onclick="window.location='';"> Cancel</button>
+		<button type="submit" class="savebtn">Save</button>
+	</form>
+</body>
+{% endblock %}
