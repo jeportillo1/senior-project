@@ -1,0 +1,31 @@
+# Settings to add to C:/Apache24/conf/httpd.conf
+# update as needed
+
+#
+# ServerName gives the name and port that the server uses to identify itself.
+# This can often be determined automatically, but we recommend you specify
+# it explicitly to prevent problems during startup.
+#
+# If your host doesn't have a registered DNS name, enter its IP address here.
+#
+# ServerName localhost:80 # use this if you're running this on a VirtualBox VM or PC
+ServerName localhost:80
+
+
+# Django Project first 3 from "mod_wsgi-express module-config"
+LoadFile "C:/Users/eleme/AppData/Local/Programs/Python/Python310/python310.dll"
+LoadModule wsgi_module "C:/Users/eleme/AppData/Local/Programs/Python/Python310/lib/site-packages/mod_wsgi/server/mod_wsgi.cp310-win_amd64.pyd"
+WSGIPythonHome "C:/Users/eleme/AppData/Local/Programs/Python/Python310"
+WSGIScriptAlias / "C:/Users/eleme/Desktop/CSCSeniorProjectVScode/senior-project/appsetup/wsgi.py"
+WSGIPythonPath "C:/Users/eleme/Desktop/CSCSeniorProjectVScode/senior-project/"
+
+<Directory "C:/Users/eleme/Desktop/CSCSeniorProjectVScode/senior-project/appsetup/">
+    <Files wsgi.py>
+        Require all granted
+    </Files>
+</Directory>
+
+Alias /static "C:/Users/eleme/Desktop/CSCSeniorProjectVScode/senior-project/staticfiles/"
+<Directory "C:/Users/eleme/Desktop/CSCSeniorProjectVScode/senior-project/staticfiles/">
+    Require all granted
+</Directory>

@@ -1,0 +1,12 @@
+[
+  {
+    "model": "app.global_settings",
+    "pk": 1,
+    "fields": {
+      "allow_inventory_changes": true,
+      "allow_adding_new_users": true,
+      "allow_inventory_purchases": true,
+      "allow_paring_data": true
+    }
+  }
+]

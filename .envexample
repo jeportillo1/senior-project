@@ -1,0 +1,19 @@
+# keep secret
+SECRET_KEY="12345"
+
+# if multiple seperate with space. ex: "host1 host2"
+DEPLOY_ALLOWED_HOST="*"
+
+# development database server
+DEV_DB_NAME="name"
+DEV_DB_USER="username"
+DEV_DB_PASS="passoword"
+DEV_DB_HOST="mydb.XXX.rds.amazonaws.com"
+DEV_DB_PORT="3306"
+
+# production database server
+PRO_DB_NAME="name"
+PRO_DB_USER="username"
+PRO_DB_PASS="passoword"
+PRO_DB_HOST="mydb.XXX.rds.amazonaws.com"
+PRO_DB_PORT="3306"
